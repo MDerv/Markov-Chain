@@ -3,8 +3,10 @@
 10/27/2020
 This file defines the MarkovChain class.
 */
+
 import java.io.*;
 import java.util.*;
+
 
 public class MarkovChain {
 
@@ -19,16 +21,52 @@ public class MarkovChain {
         InputStreamReader reader = new InputStreamReader(new FileInputStream("src/" + trainingFileName));
         BufferedReader readTests = new BufferedReader(reader); //allows the training file to be read
 
-        FileWriter writer = new FileWriter("src/Dictionary.json", true);
-        BufferedWriter writeLog = new BufferedWriter(writer);
+        FileWriter writer = new FileWriter("src/Dictionary.txt", true);
+        BufferedWriter writeDict = new BufferedWriter(writer);
 
+        String readLine = readTests.readLine(); //reads line from file
+        System.out.println(readLine);
 
-        String st = readTests.readLine();
-        System.out.println(st);
+        ArrayList<String> words = new ArrayList<String>();
+        HashMap<String, ArrayList<String>> dict = new HashMap<String, ArrayList<String>>();
+        String[] sentencePeriod = readLine.trim().split("\\.|\\!|\\?|\\;"); //splits sentences
+//        for(String lol : sentencePeriod) {
+//            System.out.println(lol);
+//        }
+//        if(sentencePeriod.length == 0) {
+//            System.out.println("bruh");
+//        }
 
+        for(int i = 0; i < sentencePeriod.length; i++) {
+            String[] tempArray = sentencePeriod[i].trim().split("\\s+");
+            for(int j = 0; j < tempArray.length; j++) {
+                words.add(tempArray[j]);
+            }
+        }
 
-        writeLog.write(st + " = " + "\n");
-        writeLog.close();
+        for(int i = 0; i < words.size()-1; i++) {
+            if(!dict.containsKey(words.get(i))){
+                ArrayList<String> nextWord = new ArrayList<String>();
+                nextWord.add(words.get(i+1));
+                dict.put(words.get(i), nextWord);
+            }
+            else {
+                ArrayList<String> addedNewWord = dict.get(words.get(i));
+                addedNewWord.add(words.get(i+1));
+                dict.put(words.get(i), addedNewWord);
+            }
+        }
 
+        for(Map.Entry<String, ArrayList<String>> entry : dict.entrySet()) {
+
+            //put key and value separated by a colon
+            writeDict.write( entry.getKey() + ":" + entry.getValue());
+
+            //new line
+            writeDict.newLine();
+        }
+
+        writeDict.close();
+        
     }
 }
