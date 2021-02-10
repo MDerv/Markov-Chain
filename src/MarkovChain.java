@@ -18,6 +18,7 @@ public class MarkovChain {
         int numWords = s.nextInt();
         s.nextLine();
 
+        //reading from and writing to files
         InputStreamReader reader = new InputStreamReader(new FileInputStream("src/" + trainingFileName));
         BufferedReader readTests = new BufferedReader(reader); //allows the training file to be read
 
@@ -25,7 +26,6 @@ public class MarkovChain {
         BufferedWriter writeDict = new BufferedWriter(writer); //writes to Dictionary.txt file
 
         String readLine = readTests.readLine(); //reads line from file
-        System.out.println(readLine);
 
         ArrayList<String> words = new ArrayList<String>(); //ArrayList of all words from training file in order
         HashMap<String, ArrayList<String>> dict = new HashMap<String, ArrayList<String>>();
